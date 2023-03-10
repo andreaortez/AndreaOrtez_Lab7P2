@@ -6,6 +6,7 @@ import java.io.Serializable;
 public class Archivo implements Serializable{
     private String nombre, link, extensión;
     private double tamaño;
+    private boolean favorito;
 
     private static final long SerialVersionUID=111L;
     

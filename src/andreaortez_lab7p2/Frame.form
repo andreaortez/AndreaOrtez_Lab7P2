@@ -56,7 +56,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JList" name="jl1">
+            <Component class="javax.swing.JList" name="jl__opciones">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dubai" size="36" style="0"/>
@@ -69,6 +69,9 @@
                   </StringArray>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="jl__opcionesValueChanged"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
@@ -87,7 +90,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTree" name="jl2">
+            <Component class="javax.swing.JTree" name="Jt_listar">
               <Properties>
                 <Property name="model" type="javax.swing.tree.TreeModel" editor="org.netbeans.modules.form.editors2.TreeModelEditor">
                   <TreeModel code=""/>
