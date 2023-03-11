@@ -285,7 +285,8 @@ public class Frame extends javax.swing.JFrame {
 
             aa.setArchivos(a);
             aa.escribirArchivo();
-
+            Jt_listar.removeAll();
+            ListarUnidad();
             JOptionPane.showMessageDialog(this, "Archivo agregado exitosamente");
 
         } catch (Exception ex) {
@@ -300,6 +301,8 @@ public class Frame extends javax.swing.JFrame {
             ac.escribirArchivo();
             JOptionPane.showInputDialog("Carpeta agregada exitosamente");
 
+            Jt_listar.removeAll();
+            ListarUnidad();
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ocurrió un error y no se guardaron los datos");
@@ -379,33 +382,7 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_descarga1ActionPerformed
 
     private void bt_listarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_listarMouseClicked
-        DefaultTreeModel modelo = (DefaultTreeModel) Jt_listar.getModel();
-        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
-        DefaultMutableTreeNode nodoC, nodoA;
-        Archivo[] archivos = new Archivo[aa.getArchivos().size()];
-        int cont = 0;
-
-        if (jl__opciones.getSelectedIndex() == 0) {
-            raiz.setUserObject("Mi Unidad");
-            for (Carpeta c : ac.getCarpetas()) {
-                nodoC = new DefaultMutableTreeNode(c.getNombre());
-
-                //agregar archivos a las carpetas
-                for (Archivo a : c.getArchivos()) {
-                    for (Archivo ar : aa.getArchivos()) {
-                        if (a.getNombre().equals(ar.getNombre())) {
-                            nodoA = new DefaultMutableTreeNode(ar.getNombre());
-                            nodoC.add(nodoA);
-                        } else {
-                            archivos[cont] = ar;
-                            cont++;
-                        }
-                    }
-                }
-                raiz.add(nodoC);
-            }
-        }
-        modelo.reload();
+        ListarUnidad();
     }//GEN-LAST:event_bt_listarMouseClicked
 
     public static void main(String args[]) {
@@ -514,6 +491,68 @@ public class Frame extends javax.swing.JFrame {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void ListarUnidad() {
+        DefaultTreeModel modelo = (DefaultTreeModel) Jt_listar.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
+        DefaultMutableTreeNode nodoC, nodoA;
+        Archivo[] archivos = new Archivo[aa.getArchivos().size()];
+        int cont = 0;
+
+        if (jl__opciones.getSelectedIndex() == 0) {
+            raiz.setUserObject("Mi Unidad");
+            for (Carpeta c : ac.getCarpetas()) {
+                nodoC = new DefaultMutableTreeNode(c.getNombre());
+
+                //agregar archivos a las carpetas
+                for (Archivo a : c.getArchivos()) {
+                    for (Archivo ar : aa.getArchivos()) {
+                        if (a.getNombre().equals(ar.getNombre())) {
+                            System.out.println("entré");
+                            nodoA = new DefaultMutableTreeNode(ar.getNombre());
+                            nodoC.add(nodoA);
+                        } else {
+                            archivos[cont] = ar;
+                            cont++;
+                        }
+                    }
+                }
+                raiz.add(nodoC);
+            }
+        }
+        modelo.reload();
+    }
+
+    public void ListarDestacados() {
+        DefaultTreeModel modelo = (DefaultTreeModel) Jt_listar.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
+        DefaultMutableTreeNode nodoC, nodoA;
+        Archivo[] archivos = new Archivo[aa.getArchivos().size()];
+        int cont = 0;
+
+        if (jl__opciones.getSelectedIndex() == 1) {
+            raiz.setUserObject("Destacados");
+            for (Carpeta c : ac.getCarpetas()) {
+                if (c.isFavorito()) {
+                    nodoC = new DefaultMutableTreeNode(c.getNombre());
+                    for (Archivo a : c.getArchivos()) {
+                        for (Archivo ar : aa.getArchivos()) {
+                            if (a.getNombre().equals(ar.getNombre())) {
+                                nodoA = new DefaultMutableTreeNode(ar.getNombre());
+                                nodoC.add(nodoA);
+                            } else {
+                                archivos[cont] = ar;
+                                cont++;
+                            }
+                        }
+                    }
+                    raiz.add(nodoC);
+                }
+                //agregar archivos a las carpetas
+            }
+        }
+        modelo.reload();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

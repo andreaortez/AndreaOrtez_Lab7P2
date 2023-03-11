@@ -39,8 +39,9 @@ public class Barra implements Runnable {
             try {
                 tiempo += a.getTamaño();
                 Barra2 b = new Barra2(barra2, a, tiempo);
-                b.start();
-                
+                Thread process = new Thread(b);
+                process.start();
+
                 //bitacora
                 File file = new File("./bitacora.txt");
                 FileWriter fw = null;
@@ -50,6 +51,8 @@ public class Barra implements Runnable {
                 String cad = a.getNombre() + " -> " + a.getTamaño() + " -> " + new Date() + "\n";
                 bw.write(cad);
                 bw.flush();
+                bw.close();
+                fw.close();
             } catch (IOException ex) {
                 Logger.getLogger(Barra.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -62,15 +65,6 @@ public class Barra implements Runnable {
             Thread.sleep((long) sleep);
         } catch (InterruptedException ex) {
         }
-
-        FileWriter fw = null;
-        BufferedWriter bw = null;
-        try {
-
-        } catch (Exception ex) {
-        }
-        bw.close();
-        fw.close();
     }
 
     public void cantidad(Carpeta c) {
