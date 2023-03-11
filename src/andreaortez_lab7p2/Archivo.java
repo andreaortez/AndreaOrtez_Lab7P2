@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class Archivo implements Serializable{
     private String nombre, link, extensión;
     private double tamaño;
-    private boolean favorito;
+    private boolean favorito, papelera;
 
     private static final long SerialVersionUID=111L;
     
@@ -18,6 +18,7 @@ public class Archivo implements Serializable{
         this.link = link;
         this.extensión = extensión;
         this.tamaño = tamaño;
+        this.favorito = false;
     }
 
     public String getNombre() {
@@ -52,6 +53,14 @@ public class Archivo implements Serializable{
         this.tamaño = tamaño;
     }
 
+    public boolean isFavorito() {
+        return favorito;
+    }
+
+    public void setFavorito(boolean favorito) {
+        this.favorito = favorito;
+    }
+    
     @Override
     public String toString() {
         return "Archivo{" + "nombre=" + nombre + '}';

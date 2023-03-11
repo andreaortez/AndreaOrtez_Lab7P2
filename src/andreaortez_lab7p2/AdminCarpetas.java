@@ -9,22 +9,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public class AdminBinario {
+public class AdminCarpetas {
     
-    private ArrayList<Archivo> archivos = new ArrayList();
     private ArrayList<Carpeta> carpetas = new ArrayList();
     private File archivo = null;
     
-    public AdminBinario(String path) {
+    public AdminCarpetas(String path) {
         archivo = new File(path);
-    }
-
-    public ArrayList<Archivo> getArchivos() {
-        return archivos;
-    }
-
-    public void setArchivos(ArrayList<Archivo> archivos) {
-        this.archivos = archivos;
     }
 
     public ArrayList<Carpeta> getCarpetas() {
@@ -43,29 +34,20 @@ public class AdminBinario {
         this.archivo = archivo;
     }
     
-    public void setArchivos(Archivo a){
-        archivos.add(a);
-    }
-    
     public void setCarpetas(Carpeta c){
         carpetas.add(c);
     }
     
     public void cargarArchivo() {
         try {            
-            archivos = new ArrayList();
             carpetas = new ArrayList();
-            Carpeta temp1;
-            Archivo temp2;
+            Carpeta temp;
             if (archivo.exists()) {
                 FileInputStream entrada = new FileInputStream(archivo);
                 ObjectInputStream objeto = new ObjectInputStream(entrada);
                 try {
-                    while ((temp1 = (Carpeta) objeto.readObject()) != null) {
-                        carpetas.add(temp1);
-                    }
-                    while ((temp2 = (Archivo) objeto.readObject()) != null) {
-                        archivos.add(temp2);
+                    while ((temp = (Carpeta) objeto.readObject()) != null) {
+                        carpetas.add(temp);
                     }
                 } catch (EOFException e) {
                 }
@@ -83,9 +65,6 @@ public class AdminBinario {
         try {
             fw = new FileOutputStream(archivo);
             bw = new ObjectOutputStream(fw);
-            for (Archivo t : archivos) {
-                bw.writeObject(t);
-            }
             for (Carpeta t : carpetas) {
                 bw.writeObject(t);
             }

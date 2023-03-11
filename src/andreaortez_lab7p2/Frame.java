@@ -10,21 +10,26 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 public class Frame extends javax.swing.JFrame {
-    
+
     Random random = new Random();
-    AdminBinario ab = new AdminBinario("./files");
+    AdminCarpetas ac = new AdminCarpetas("./carpetas");
+    AdminArchivos aa = new AdminArchivos("./archivos");
     String linkF = "dive.google.com/";
-    
+
     public Frame() {
         initComponents();
         this.setLocationRelativeTo(null);
-        ab.cargarArchivo();
+        aa.cargarArchivo();
+        ac.cargarArchivo();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pm_unidad = new javax.swing.JPopupMenu();
+        destacar = new javax.swing.JMenuItem();
+        eliminar = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jl__opciones = new javax.swing.JList<>();
@@ -35,6 +40,22 @@ public class Frame extends javax.swing.JFrame {
         bt_crearA = new javax.swing.JButton();
         bt_crearC = new javax.swing.JButton();
         jProgressBar1 = new javax.swing.JProgressBar();
+
+        destacar.setText("Destacar");
+        destacar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                destacarMouseClicked(evt);
+            }
+        });
+        destacar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                destacarActionPerformed(evt);
+            }
+        });
+        pm_unidad.add(destacar);
+
+        eliminar.setText("Papelera");
+        pm_unidad.add(eliminar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,6 +79,11 @@ public class Frame extends javax.swing.JFrame {
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         Jt_listar.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        Jt_listar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Jt_listarMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(Jt_listar);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 370, 380));
@@ -98,7 +124,7 @@ public class Frame extends javax.swing.JFrame {
     private void bt_crearAMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearAMouseClicked
         try {
             String nombre = JOptionPane.showInputDialog("Ingrese el nombre del archivo");
-            
+
             String extension = "";
             int ext = Integer.parseInt(JOptionPane.showInputDialog("1-> .mp3\n2-> .mp4\n3-> .pdf\n4-> docx\nIngrese número de extensión"));
             switch (ext) {
@@ -114,9 +140,9 @@ public class Frame extends javax.swing.JFrame {
                 case 4:
                     extension = ".docx";
             }
-            
+
             double tamaño = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el tamaño del archivo"));
-            
+
             String link = "";
             for (int i = 0; i < 10; i++) {
                 int car = 48 + random.nextInt(74);
@@ -125,38 +151,38 @@ public class Frame extends javax.swing.JFrame {
                 }
                 link += (char) car;
             }
-            
+
             Archivo a = new Archivo(nombre, linkF + link, extension, tamaño);
-            
+
             String resp = JOptionPane.showInputDialog("Desea agregar este archivo en una carpeta [n/s]");
-            
+
             if ("s".equals(resp)) {
-                if (ab.getCarpetas().isEmpty()) {
+                if (ac.getCarpetas().isEmpty()) {
                     Carpeta c = CrearCarpeta();
-                    ab.setCarpetas(c);
-                    ab.escribirArchivo();
-                    
-                    ab.getCarpetas().add(c);
+                    ac.setCarpetas(c);
+                    ac.escribirArchivo();
+
+                    ac.getCarpetas().add(c);
                     String linkC = linkCarpeta();
-                    
+
                     a = new Archivo(nombre, linkF + "/" + linkC + link, extension, tamaño);
                     c.getArchivos().add(a);
                 } else {
-                    int p = Integer.parseInt(JOptionPane.showInputDialog(Imprimir(ab.getCarpetas()) + "Ingrese posición de la carpeta"));
-                    for (int i = 0; i < ab.getCarpetas().size(); i++) {
+                    int p = Integer.parseInt(JOptionPane.showInputDialog(Imprimir(ac.getCarpetas()) + "Ingrese posición de la carpeta"));
+                    for (int i = 0; i < ac.getCarpetas().size(); i++) {
                         if (i == p) {
-                            ab.getCarpetas().get(p).getArchivos().add(a);
-                            
+                            ac.getCarpetas().get(p).getArchivos().add(a);
+
                         }
                     }
                 }
             }
-            
-            ab.setArchivos(a);
-            ab.escribirArchivo();
-            
-            JOptionPane.showInputDialog("Archivo agregado exitosamente");
-            
+
+            aa.setArchivos(a);
+            aa.escribirArchivo();
+
+            JOptionPane.showMessageDialog(this,"Archivo agregado exitosamente");
+
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ocurrió un error y no se guardaron los datos");
@@ -165,10 +191,10 @@ public class Frame extends javax.swing.JFrame {
 
     private void bt_crearCMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearCMouseClicked
         try {
-            ab.setCarpetas(CrearCarpeta());
-            ab.escribirArchivo();
+            ac.setCarpetas(CrearCarpeta());
+            ac.escribirArchivo();
             JOptionPane.showInputDialog("Carpeta agregada exitosamente");
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ocurrió un error y no se guardaron los datos");
@@ -179,34 +205,69 @@ public class Frame extends javax.swing.JFrame {
         File fichero = null;
         FileInputStream entrada = null;
         ObjectInputStream objeto = null;
-        
+
         DefaultTreeModel modelo = (DefaultTreeModel) Jt_listar.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
         DefaultMutableTreeNode nodoC, nodoA;
-        
+        Archivo[] archivos = new Archivo[aa.getArchivos().size()];
+        int cont = 0;
+
         if (jl__opciones.getSelectedIndex() == 0) {
             raiz.setUserObject("Mi Unidad");
-            for (Carpeta c : ab.getCarpetas()) {
+            for (Carpeta c : ac.getCarpetas()) {
                 nodoC = new DefaultMutableTreeNode(c.getNombre());
-                
+
                 //agregar archivos a las carpetas
                 for (Archivo a : c.getArchivos()) {
-                    for (Archivo ar : ab.getArchivos()) {
+                    for (Archivo ar : aa.getArchivos()) {
                         if (a.getNombre().equals(ar.getNombre())) {
                             nodoA = new DefaultMutableTreeNode(ar.getNombre());
                             nodoC.add(nodoA);
-                        }else if (true) {
-                            
+                        } else {
+                            archivos[cont] = ar;
+                            cont++;
                         }
                     }
                 }
-                
                 raiz.add(nodoC);
+
+//                for (int i = 0; i < archivos.length; i++) {
+//                    for (Archivo a : ab.getArchivos()) {
+//                        if (a.getNombre().equals(archivos[i].getNombre())) {
+//                            nodoA = new DefaultMutableTreeNode(a.getNombre());
+//                            raiz.add(nodoA);
+//                        }
+//                    }
+//                }      
             }
-            
+
         }
     }//GEN-LAST:event_jl__opcionesValueChanged
-    
+
+    private void Jt_listarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Jt_listarMouseClicked
+        if (evt.isMetaDown()) {
+            int row = Jt_listar.getClosestRowForLocation(evt.getX(), evt.getY());
+            Jt_listar.setSelectionRow(row);
+            Object v = Jt_listar.getSelectionPath().getLastPathComponent();
+            DefaultMutableTreeNode nodo = (DefaultMutableTreeNode)v;
+            
+            
+            if (jl__opciones.getSelectedIndex()==0) {
+                pm_unidad.show(evt.getComponent(), evt.getX(), evt.getY());
+            }
+        }
+    }//GEN-LAST:event_Jt_listarMouseClicked
+
+    private void destacarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_destacarMouseClicked
+        
+    }//GEN-LAST:event_destacarMouseClicked
+
+    private void destacarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_destacarActionPerformed
+        if (Jt_listar.getSelectionCount()>0) {
+            
+        }
+    }//GEN-LAST:event_destacarActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -238,14 +299,14 @@ public class Frame extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public Carpeta CrearCarpeta() {
         String nombre = JOptionPane.showInputDialog("Ingrese el nombre de la carpeta");
-        
+
         Carpeta c = new Carpeta(nombre);
         return c;
     }
-    
+
     public String linkCarpeta() {
         String link = "";
         for (int i = 0; i < 5; i++) {
@@ -257,13 +318,13 @@ public class Frame extends javax.swing.JFrame {
         }
         return link;
     }
-    
+
     public static String Imprimir(ArrayList<Carpeta> temp) {
         String cad = "";
         for (int i = 0; i < temp.size(); i++) {
-            cad += "" + i + " - " + temp.get(i) + "\n";
+            cad += "" + i + " - " + temp.get(i).getNombre() + "\n";
         }
-        
+
         return cad;
     }//Fin imprimir
 
@@ -271,6 +332,8 @@ public class Frame extends javax.swing.JFrame {
     private javax.swing.JTree Jt_listar;
     private javax.swing.JButton bt_crearA;
     private javax.swing.JButton bt_crearC;
+    private javax.swing.JMenuItem destacar;
+    private javax.swing.JMenuItem eliminar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -278,5 +341,6 @@ public class Frame extends javax.swing.JFrame {
     private javax.swing.JList<String> jl__opciones;
     private javax.swing.JProgressBar pb1;
     private javax.swing.JProgressBar pb2;
+    private javax.swing.JPopupMenu pm_unidad;
     // End of variables declaration//GEN-END:variables
 }
