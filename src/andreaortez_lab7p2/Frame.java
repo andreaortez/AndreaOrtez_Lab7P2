@@ -380,6 +380,7 @@ public class Frame extends javax.swing.JFrame {
             Barra b = new Barra(pb_principal, pb1, (Carpeta) Jt_listar.getSelectionPath().getLastPathComponent());
             Thread process = new Thread(b);
             process.start();
+            Tabla.setVisible(true);
             ListarTabla();
         }
     }//GEN-LAST:event_descarga1ActionPerformed
