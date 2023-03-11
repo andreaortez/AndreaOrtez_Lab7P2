@@ -20,6 +20,7 @@ public class Barra implements Runnable {
         this.barra = barra;
         this.barra2 = barra2;
         this.c = c;
+
     }
 
     public JProgressBar getBarra() {
@@ -35,8 +36,9 @@ public class Barra implements Runnable {
 
         double tiempo = 0;
         for (Archivo a : archivos) {
-
             try {
+                barra.setString(a.getLink());
+
                 tiempo += a.getTamaño();
                 Barra2 b = new Barra2(barra2, a, tiempo / 10);
                 Thread process = new Thread(b);
@@ -53,6 +55,7 @@ public class Barra implements Runnable {
                 bw.flush();
                 bw.close();
                 fw.close();
+                
             } catch (IOException ex) {
                 Logger.getLogger(Barra.class.getName()).log(Level.SEVERE, null, ex);
             }

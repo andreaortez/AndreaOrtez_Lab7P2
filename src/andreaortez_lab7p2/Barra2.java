@@ -1,13 +1,8 @@
 package andreaortez_lab7p2;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Date;
 import javax.swing.JProgressBar;
 
-public class Barra2 implements Runnable{
+public class Barra2 implements Runnable {
 
     private JProgressBar barra;
     private Archivo a;
@@ -17,17 +12,18 @@ public class Barra2 implements Runnable{
         this.barra = barra;
         this.a = a;
         this.size = size;
+        barra.setMaximum((int)size);
     }
 
     @Override
     public void run() {
         while (barra.getValue() != barra.getMaximum()) {
-            barra.setValue(barra.getValue());
+            barra.setValue(barra.getValue()+1);
         }
-
         try {
-
+            Thread.sleep(1000);
         } catch (Exception ex) {
         }
+        barra.setValue(0);
     }
 }

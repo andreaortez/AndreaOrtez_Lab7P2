@@ -289,7 +289,7 @@ public class Frame extends javax.swing.JFrame {
             }
             aa.setArchivos(a);
             aa.escribirArchivo();
-            Jt_listar.removeAll();
+
             ListarUnidad();
             JOptionPane.showMessageDialog(this, "Archivo agregado exitosamente");
 
@@ -305,7 +305,6 @@ public class Frame extends javax.swing.JFrame {
             ac.escribirArchivo();
             JOptionPane.showInputDialog("Carpeta agregada exitosamente");
 
-            Jt_listar.removeAll();
             ListarUnidad();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -389,7 +388,6 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_descarga1ActionPerformed
 
     private void bt_listarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_listarMouseClicked
-        Jt_listar.removeAll();
         if (jl__opciones.getSelectedIndex() == 0) {
             ListarUnidad();
         } else if (jl__opciones.getSelectedIndex() == 1) {
@@ -523,11 +521,10 @@ public class Frame extends javax.swing.JFrame {
     }
 
     public void ListarUnidad() {
+        Jt_listar.removeAll();
         DefaultTreeModel modelo = (DefaultTreeModel) Jt_listar.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
         DefaultMutableTreeNode nodoC, nodoA;
-        Archivo[] archivos = new Archivo[aa.getArchivos().size()];
-        int cont = 0;
 
         raiz.setUserObject("Mi Unidad");
         for (Carpeta c : ac.getCarpetas()) {
@@ -535,22 +532,13 @@ public class Frame extends javax.swing.JFrame {
                 nodoC = new DefaultMutableTreeNode(c.getNombre());
 
                 //agregar archivos a las carpetas
-//                if (!c.getArchivos().isEmpty()) {
-                System.out.println(c.getArchivos().size());
-                for (Archivo a : c.getArchivos()) {
-
-                    for (Archivo ar : aa.getArchivos()) {
-                        System.out.println(aa.getArchivos().size());
-                        if (a.getNombre().equals(ar.getNombre())) {
-                            System.out.println("entré");
-                            nodoA = new DefaultMutableTreeNode(ar.getNombre());
-                            nodoC.add(nodoA);
-                        } else {
-                            archivos[cont] = ar;
-                            cont++;
-                        }
+                if (!c.getArchivos().isEmpty()) {
+                    for (int i = 0; i < c.getArchivos().size(); i++) {
+                        nodoA = new DefaultMutableTreeNode(c.getArchivos().get(i));
+                        nodoC.add(nodoA);
                     }
                 }
+
                 raiz.add(nodoC);
             }
         }
@@ -558,6 +546,7 @@ public class Frame extends javax.swing.JFrame {
     }
 
     public void ListarDestacados() {
+        Jt_listar.removeAll();
         DefaultTreeModel modelo = (DefaultTreeModel) Jt_listar.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
         DefaultMutableTreeNode nodoC, nodoA;
@@ -587,6 +576,7 @@ public class Frame extends javax.swing.JFrame {
     }
 
     public void ListarPapelera() {
+        Jt_listar.removeAll();
         DefaultTreeModel modelo = (DefaultTreeModel) Jt_listar.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
         DefaultMutableTreeNode nodoC, nodoA;
