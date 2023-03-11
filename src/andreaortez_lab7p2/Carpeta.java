@@ -8,7 +8,7 @@ public class Carpeta implements Serializable{
     private String nombre;
     private ArrayList <Archivo> archivos = new ArrayList();
     private ArrayList <Carpeta> carpetas = new ArrayList();
-    private boolean favoritos, papelera;
+    private boolean unidad, favorito, papelera;
 
     private static final long SerialVersionUID=222L;
     
@@ -17,6 +17,9 @@ public class Carpeta implements Serializable{
 
     public Carpeta(String nombre) {
         this.nombre = nombre;
+        this.unidad = true;
+        this.favorito = false;
+        this.papelera = false;
     }
 
     public String getNombre() {
@@ -41,6 +44,30 @@ public class Carpeta implements Serializable{
 
     public void setCarpetas(ArrayList<Carpeta> carpetas) {
         this.carpetas = carpetas;
+    }
+
+    public boolean isFavorito() {
+        return favorito;
+    }
+
+    public void setFavorito(boolean favorito) {
+        this.favorito = favorito;
+    }
+
+    public boolean isPapelera() {
+        return papelera;
+    }
+
+    public void setPapelera(boolean papelera) {
+        this.papelera = papelera;
+    }
+
+    public boolean isUnidad() {
+        return unidad;
+    }
+
+    public void setUnidad(boolean unidad) {
+        this.unidad = unidad;
     }
 
     @Override
