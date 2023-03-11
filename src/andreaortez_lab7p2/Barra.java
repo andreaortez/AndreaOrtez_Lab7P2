@@ -38,7 +38,7 @@ public class Barra implements Runnable {
 
             try {
                 tiempo += a.getTamaño();
-                Barra2 b = new Barra2(barra2, a, tiempo);
+                Barra2 b = new Barra2(barra2, a, tiempo / 10);
                 Thread process = new Thread(b);
                 process.start();
 
@@ -57,12 +57,10 @@ public class Barra implements Runnable {
                 Logger.getLogger(Barra.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        double sleep = tiempo / 10;
-        sleep *= 1000;
         barra.setValue(barra.getValue() + 1);
 
         try {
-            Thread.sleep((long) sleep);
+            Thread.sleep(2000);
         } catch (InterruptedException ex) {
         }
     }

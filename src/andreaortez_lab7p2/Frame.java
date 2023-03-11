@@ -97,6 +97,11 @@ public class Frame extends javax.swing.JFrame {
         pm_destacados.add(papelera);
 
         descarga2.setText("Descargar");
+        descarga2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                descarga2ActionPerformed(evt);
+            }
+        });
         pm_destacados.add(descarga2);
 
         restaurar.setText("Restaurar");
@@ -282,7 +287,6 @@ public class Frame extends javax.swing.JFrame {
                     }
                 }
             }
-
             aa.setArchivos(a);
             aa.escribirArchivo();
             Jt_listar.removeAll();
@@ -377,13 +381,33 @@ public class Frame extends javax.swing.JFrame {
 
     private void descarga1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descarga1ActionPerformed
         if (Jt_listar.getSelectionCount() > 0) {
+            Barra b = new Barra(pb_principal, pb1, (Carpeta) Jt_listar.getSelectionPath().getLastPathComponent());
+            Thread process = new Thread(b);
+            process.start();
             ListarTabla();
         }
     }//GEN-LAST:event_descarga1ActionPerformed
 
     private void bt_listarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_listarMouseClicked
-        ListarUnidad();
+        Jt_listar.removeAll();
+        if (jl__opciones.getSelectedIndex() == 0) {
+            ListarUnidad();
+        } else if (jl__opciones.getSelectedIndex() == 1) {
+            ListarDestacados();
+        } else {
+            ListarPapelera();
+        }
+
     }//GEN-LAST:event_bt_listarMouseClicked
+
+    private void descarga2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descarga2ActionPerformed
+        if (Jt_listar.getSelectionCount() > 0) {
+            Barra b = new Barra(pb_principal, pb1, (Carpeta) Jt_listar.getSelectionPath().getLastPathComponent());
+            Thread process = new Thread(b);
+            process.start();
+            ListarTabla();
+        }
+    }//GEN-LAST:event_descarga2ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -452,15 +476,20 @@ public class Frame extends javax.swing.JFrame {
             for (Archivo a : aa.getArchivos()) {
                 if (a.getNombre().equals(v.toString())) {
                     a.setPapelera(true);
+                    a.setUnidad(false);
+                    a.setFavorito(false);
                 }
             }
         } else {
             for (Carpeta c : ac.getCarpetas()) {
                 if (c.getNombre().equals(v.toString())) {
                     c.setPapelera(true);
+                    c.setUnidad(false);
+                    c.setFavorito(false);
                 }
             }
         }
+
     }
 
     public void Descarga() {
@@ -500,14 +529,18 @@ public class Frame extends javax.swing.JFrame {
         Archivo[] archivos = new Archivo[aa.getArchivos().size()];
         int cont = 0;
 
-        if (jl__opciones.getSelectedIndex() == 0) {
-            raiz.setUserObject("Mi Unidad");
-            for (Carpeta c : ac.getCarpetas()) {
+        raiz.setUserObject("Mi Unidad");
+        for (Carpeta c : ac.getCarpetas()) {
+            if (c.isUnidad()) {
                 nodoC = new DefaultMutableTreeNode(c.getNombre());
 
                 //agregar archivos a las carpetas
+//                if (!c.getArchivos().isEmpty()) {
+                System.out.println(c.getArchivos().size());
                 for (Archivo a : c.getArchivos()) {
+
                     for (Archivo ar : aa.getArchivos()) {
+                        System.out.println(aa.getArchivos().size());
                         if (a.getNombre().equals(ar.getNombre())) {
                             System.out.println("entré");
                             nodoA = new DefaultMutableTreeNode(ar.getNombre());
@@ -531,25 +564,51 @@ public class Frame extends javax.swing.JFrame {
         Archivo[] archivos = new Archivo[aa.getArchivos().size()];
         int cont = 0;
 
-        if (jl__opciones.getSelectedIndex() == 1) {
-            raiz.setUserObject("Destacados");
-            for (Carpeta c : ac.getCarpetas()) {
-                if (c.isFavorito()) {
-                    nodoC = new DefaultMutableTreeNode(c.getNombre());
-                    for (Archivo a : c.getArchivos()) {
-                        for (Archivo ar : aa.getArchivos()) {
-                            if (a.getNombre().equals(ar.getNombre())) {
-                                nodoA = new DefaultMutableTreeNode(ar.getNombre());
-                                nodoC.add(nodoA);
-                            } else {
-                                archivos[cont] = ar;
-                                cont++;
-                            }
+        raiz.setUserObject("Destacados");
+        for (Carpeta c : ac.getCarpetas()) {
+            if (c.isFavorito()) {
+                nodoC = new DefaultMutableTreeNode(c.getNombre());
+                for (Archivo a : c.getArchivos()) {
+                    for (Archivo ar : aa.getArchivos()) {
+                        if (a.getNombre().equals(ar.getNombre())) {
+                            nodoA = new DefaultMutableTreeNode(ar.getNombre());
+                            nodoC.add(nodoA);
+                        } else {
+                            archivos[cont] = ar;
+                            cont++;
                         }
                     }
-                    raiz.add(nodoC);
                 }
-                //agregar archivos a las carpetas
+                raiz.add(nodoC);
+            }
+        }
+
+        modelo.reload();
+    }
+
+    public void ListarPapelera() {
+        DefaultTreeModel modelo = (DefaultTreeModel) Jt_listar.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
+        DefaultMutableTreeNode nodoC, nodoA;
+        Archivo[] archivos = new Archivo[aa.getArchivos().size()];
+        int cont = 0;
+
+        raiz.setUserObject("Papelera");
+        for (Carpeta c : ac.getCarpetas()) {
+            if (c.isPapelera()) {
+                nodoC = new DefaultMutableTreeNode(c.getNombre());
+                for (Archivo a : c.getArchivos()) {
+                    for (Archivo ar : aa.getArchivos()) {
+                        if (a.getNombre().equals(ar.getNombre())) {
+                            nodoA = new DefaultMutableTreeNode(ar.getNombre());
+                            nodoC.add(nodoA);
+                        } else {
+                            archivos[cont] = ar;
+                            cont++;
+                        }
+                    }
+                }
+                raiz.add(nodoC);
             }
         }
         modelo.reload();
