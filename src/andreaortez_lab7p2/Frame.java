@@ -1,8 +1,5 @@
 package andreaortez_lab7p2;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JOptionPane;
@@ -395,7 +392,6 @@ public class Frame extends javax.swing.JFrame {
         } else {
             ListarPapelera();
         }
-
     }//GEN-LAST:event_bt_listarMouseClicked
 
     private void descarga2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descarga2ActionPerformed

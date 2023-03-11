@@ -81,7 +81,7 @@ public class Archivo implements Serializable{
     
     @Override
     public String toString() {
-        return "Archivo{" + "nombre=" + nombre + '}';
+        return nombre;
     }
     
 }
